@@ -4,11 +4,13 @@
 //
 //  Created by Hsin-Hung Chen on 2022/2/11.
 //
-
+//#include <iostream>
 #include "CombFilter.h"
 
+
+
 CCombFilterBase::CCombFilterBase(float fMaxDelayLengthInS, float fSampleRateInHz, int iNumChannels)
-: m_fGain(0.F), m_iNumChannels(iNumChannels), m_buffer(nullptr)
+: m_fGain(0.F), m_iNumChannels(iNumChannels), m_buffer(nullptr), m_fSampleRateInHz(fSampleRateInHz)
 {
     setDelay(fMaxDelayLengthInS);
 }
@@ -27,9 +29,7 @@ CCombFilterBase::~CCombFilterBase() {
 Setter part
 */
 Error_t CCombFilterBase::setGain(float fGain) {
-    //if (!isInRange(0.F, m_kfMaxGain, fGain)) {
-    //    return Error_t::kFunctionInvalidArgsError;
-    //}
+    
     m_fGain = fGain;
     return Error_t::kNoError;
 }
@@ -38,11 +38,9 @@ Error_t CCombFilterBase::setGain(float fGain) {
 \param fDelay the delay time IN SECOND
 */
 Error_t CCombFilterBase::setDelay(float fDelay) {
-    //if (!isInRange(0.F, m_kfMaxDelay, fDelay)) {
-    //    return Error_t::kFunctionInvalidArgsError;
-    //}
+    
     m_fDelay = fDelay;
-    m_iDelayInSample = static_cast<int>(m_fDelay / m_fSampleRateInHz);
+    m_iDelayInSample = static_cast<int>(m_fDelay * m_fSampleRateInHz);
     if (m_buffer != nullptr) {
         delete m_buffer;
     }
@@ -97,7 +95,7 @@ float CCombFilterBase::getParam(CCombFilterIf::FilterParam_t eParam) const {
 FIRCombFilter::FIRCombFilter(float fMaxDelayLengthInS, float fSampleRateInHz, int iNumChannels)
     : CCombFilterBase(fMaxDelayLengthInS, fSampleRateInHz, iNumChannels) {}
 
-Error_t FIRCombFilter::process(float** ppfInputBuffer, float** ppfOutputBuffer, int iNumberOfFrames) {
+Error_t FIRCombFilter::filter(float** ppfInputBuffer, float** ppfOutputBuffer, int iNumberOfFrames) {
     for (int i = 0; i < m_iNumChannels; ++i) {
         m_buffer->reset();
         m_buffer->setWriteIdx(m_iDelayInSample);
@@ -111,7 +109,7 @@ Error_t FIRCombFilter::process(float** ppfInputBuffer, float** ppfOutputBuffer, 
 IIRCombFilter::IIRCombFilter(float fMaxDelayLengthInS, float fSampleRateInHz, int iNumChannels)
     : CCombFilterBase(fMaxDelayLengthInS, fSampleRateInHz, iNumChannels) {}
 
-Error_t IIRCombFilter::process(float** ppfInputBuffer, float** ppfOutputBuffer, int iNumberOfFrames) {
+Error_t IIRCombFilter::filter(float** ppfInputBuffer, float** ppfOutputBuffer, int iNumberOfFrames) {
     for (int i = 0; i < m_iNumChannels; ++i) {
         m_buffer->reset();
         m_buffer->setWriteIdx(m_iDelayInSample);

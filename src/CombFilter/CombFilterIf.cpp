@@ -68,10 +68,10 @@ Error_t CCombFilterIf::destroy (CCombFilterIf*& pCCombFilter)
 Error_t CCombFilterIf::init (CombFilterType_t eFilterType, float fMaxDelayLengthInS, float fSampleRateInHz, int iNumChannels)
 {
     if(eFilterType == CombFilterType_t::kCombFIR){
-        m_pCCombFilter = new FIRCombFilter();
+        m_pCCombFilter = new FIRCombFilter(fMaxDelayLengthInS,fSampleRateInHz,iNumChannels);
     }
     else if(eFilterType == CombFilterType_t::kCombIIR){
-        m_pCCombFilter = new IIRCombFilter();
+        m_pCCombFilter = new IIRCombFilter(fMaxDelayLengthInS,fSampleRateInHz,iNumChannels);
     }
     else{
         return Error_t::kFunctionInvalidArgsError;
@@ -92,18 +92,18 @@ Error_t CCombFilterIf::reset ()
 
 Error_t CCombFilterIf::process (float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames)
 {
-    return m_pCCombFilter->process(ppfInputBuffer, ppfOutputBuffer, iNumberOfFrames)
+    return m_pCCombFilter->filter(ppfInputBuffer, ppfOutputBuffer, iNumberOfFrames);
     //return Error_t::kNoError;
 }
 
 Error_t CCombFilterIf::setParam (FilterParam_t eParam, float fParamValue)
 {
-    return m_pCCombFilter->setParam(eParam, fParamValue)
+    return m_pCCombFilter->setParam(eParam, fParamValue);
     //return Error_t::kNoError;
 }
 
 float CCombFilterIf::getParam (FilterParam_t eParam) const
 {
-    return m_pCCombFilter->getParam(eParam)
+    return m_pCCombFilter->getParam(eParam);
     //return 0;
 }
