@@ -6,7 +6,7 @@
 # MUSI6106 2022: Audio Software Engineering
 Template project for assignments and exercises for the class MUSI6106
 
-#HW Comb Filter effect
+# HW1 Comb Filter effect
 Command: ./MUSI6016Exec ${input wave file/path} ${output wave file/path} ${delay in s} ${gain}
 
 
