@@ -15,19 +15,12 @@ CCombFilterBase::CCombFilterBase(float fMaxDelayLengthInS, float fSampleRateInHz
     setDelay(fMaxDelayLengthInS);
 }
 
-CCombFilterBase::~CCombFilterBase() {
-    if (m_buffer != nullptr) {
-        delete m_buffer;
-    }
+CCombFilterBase::~CCombFilterBase()
+{
+    delete m_buffer;
 }
 
-//bool CCombFilterBase::isInRange(float lower, float upper, float value) {
-//    return (lower <= value && value < upper);
-//}
 
-/*
-Setter part
-*/
 Error_t CCombFilterBase::setGain(float fGain) {
     
     m_fGain = fGain;
@@ -48,6 +41,7 @@ Error_t CCombFilterBase::setDelay(float fDelay) {
     return Error_t::kNoError;
 }
 
+
 Error_t CCombFilterBase::setParam(CCombFilterIf::FilterParam_t eParam, float fParamValue) {
     switch (eParam)
     {
@@ -65,9 +59,6 @@ Error_t CCombFilterBase::setParam(CCombFilterIf::FilterParam_t eParam, float fPa
     return Error_t::kNoError;
 }
 
-/*
-Getter part
-*/
 
 float CCombFilterBase::getGain() const {
     return m_fGain;
@@ -76,6 +67,7 @@ float CCombFilterBase::getGain() const {
 float CCombFilterBase::getDelay() const {
     return m_fDelay;
 }
+
 
 float CCombFilterBase::getParam(CCombFilterIf::FilterParam_t eParam) const {
     switch (eParam)
@@ -91,6 +83,7 @@ float CCombFilterBase::getParam(CCombFilterIf::FilterParam_t eParam) const {
     }
     return -1.F;
 }
+ 
 
 FIRCombFilter::FIRCombFilter(float fMaxDelayLengthInS, float fSampleRateInHz, int iNumChannels)
     : CCombFilterBase(fMaxDelayLengthInS, fSampleRateInHz, iNumChannels) {}

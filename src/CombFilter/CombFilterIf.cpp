@@ -107,3 +107,4 @@ float CCombFilterIf::getParam (FilterParam_t eParam) const
     return m_pCCombFilter->getParam(eParam);
     //return 0;
 }
+
