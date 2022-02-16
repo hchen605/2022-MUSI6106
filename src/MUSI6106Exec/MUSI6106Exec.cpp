@@ -5,8 +5,11 @@
 #include "MUSI6106Config.h"
 
 #include "AudioFileIf.h"
+<<<<<<< HEAD
 #include "CombFilterIf.h"
 #include "RingBuffer.h"
+=======
+>>>>>>> 951885e5c9426d2119789512d6a3af6be5e60cf5
 
 using std::cout;
 using std::endl;
@@ -18,6 +21,7 @@ void    showClInfo ();
 // main function
 int main(int argc, char* argv[])
 {
+<<<<<<< HEAD
     std::string sInputFilePath,                 //!< file paths
                 sOutputFilePath;
 
@@ -38,11 +42,26 @@ int main(int argc, char* argv[])
     CAudioFileIf::FileSpec_t stFileSpec;
     //CRingBuffer<float>* pCRingBuff = 0;
     //CCombFilterIf<float>* pCombFilter = 0;
+=======
+    std::string             sInputFilePath,                 //!< file paths
+                            sOutputFilePath;
+
+    static const int        kBlockSize = 1024;
+
+    clock_t                 time = 0;
+
+    float                   **ppfAudioData = 0;
+
+    CAudioFileIf            *phAudioFile = 0;
+    std::fstream            hOutputFile;
+    CAudioFileIf::FileSpec_t stFileSpec;
+>>>>>>> 951885e5c9426d2119789512d6a3af6be5e60cf5
 
     showClInfo();
 
     //////////////////////////////////////////////////////////////////////////////
     // parse command line arguments
+<<<<<<< HEAD
     if (argc < 2)
     {
         cout << "Missing audio input path!";
@@ -195,6 +214,23 @@ int main(int argc, char* argv[])
     delete[] ppfAudioData;
     delete[] ppfAudioDataOut;
     ppfAudioData = 0;
+=======
+ 
+    //////////////////////////////////////////////////////////////////////////////
+    // open the input wave file
+ 
+    //////////////////////////////////////////////////////////////////////////////
+    // open the output text file
+ 
+    //////////////////////////////////////////////////////////////////////////////
+    // allocate memory
+ 
+    //////////////////////////////////////////////////////////////////////////////
+    // get audio data and write it to the output text file (one column per channel)
+
+    //////////////////////////////////////////////////////////////////////////////
+    // clean-up (close files and free memory)
+>>>>>>> 951885e5c9426d2119789512d6a3af6be5e60cf5
 
     // all done
     return 0;

@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 cmake_minimum_required(VERSION 3.22.1)
 
+=======
+>>>>>>> 951885e5c9426d2119789512d6a3af6be5e60cf5
 set (APP MUSI6106Exec)
 
 set (AudioLIB AudioFileIO)
