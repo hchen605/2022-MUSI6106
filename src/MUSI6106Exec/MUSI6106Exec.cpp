@@ -7,6 +7,8 @@
 #include "AudioFileIf.h"
 #include "CombFilterIf.h"
 #include "RingBuffer.h"
+#include <sstream>
+#include <string.h>
 
 using std::cout;
 using std::endl;
@@ -14,7 +16,7 @@ using std::endl;
 // local function declarations
 void    showClInfo ();
 
-int test_filtering(char inPath[], char outPath[], int block_length, int mode, float delay_length);
+int test_filtering(char inPath[], char outPath[], int block_length, int mode, float delay_length, float gain);
 
 int test_1();
 int test_2();
@@ -52,33 +54,44 @@ int main(int argc, char* argv[])
     // parse command line arguments
     if (argc < 2)
     {
+        //test mode
         cout << "Missing audio input path!"<<endl;
         cout << "Running test mode!"<<endl;
         //sOutputFilePath = "test.txt";
         char inputPath[50] =        "data/sin_400Hz.wav";
-        char inputPath_zero[50] =   "data/sin_400Hz.wav";
+        char inputPath_zero[50] =   "data/zero.wav";
         char outputPath_1[50] =     "data/sin_400Hz_out_1.wav";
         char outputPath_2[50] =     "data/sin_400Hz_out_2.wav";
-        int  size[] = {2048,512,256,128};
-        
+        char outputPath_3[50] =     "data/sin_400Hz_out_3.wav";
+        char outputPath_4[50] =     "data/sin_400Hz_out_4.wav";
+        char outputPath_5[50] =     "data/sin_400Hz_out_5.wav";
+        //int  bk_size[] = {2048,512,256,128};
+        int test;
         int testResult = 0;
         
         //test 1
-        testResult = testResult + test_filtering(inputPath, outputPath_1, 1024, 1, 0.00125);//400Hz half period
+        testResult = testResult + test_filtering(inputPath, outputPath_1, 1024, 1, 0.00125, 1);//400Hz half period
         //test 2
-        testResult = testResult + test_filtering(inputPath, outputPath_2, 1024, 1, 0.0025);//400Hz
+        testResult = testResult + test_filtering(inputPath, outputPath_2, 1024, 1, 0.0025, 1);//400Hz
         //test 3
+        testResult = testResult + test_filtering(inputPath, outputPath_3, 2048, 1, 0.2, 1);
+        //test 4
+        testResult = testResult + test_filtering(inputPath_zero, outputPath_4, 1024, 1, 0.2, 1);
+        //test 5 check zero gain, should sound the same as input
+        testResult = testResult + test_filtering(inputPath, outputPath_5, 1024, 1, 0.2, 0);
         
-        
-        if(testResult==2)
+        if(testResult==5)//may find another method to verify all pass
             cout<<"Finish running tests! You may check the restored test output files"<<endl;
         else
             cout<<"Test failed"<<endl;
+                                
+        //clean
+                                
         return 0;
     }
     else
     {
-        //run input file
+        //application mode
         sInputFilePath = argv[1];
         sOutputAudPath =  argv[2];
         fmode = std::stoi(argv[3]);
@@ -187,7 +200,7 @@ int main(int argc, char* argv[])
 
 }//main
 
-int test_filtering(char inPath[], char outPath[], int block_length, int mode, float delay_length)
+int test_filtering(char inPath[], char outPath[], int block_length, int mode, float delay_length, float gain)
 {
     ///////////////////////////
     std::string sInputFilePath,                 //!< file paths
@@ -212,7 +225,7 @@ int test_filtering(char inPath[], char outPath[], int block_length, int mode, fl
     CAudioFileIf::FileSpec_t stFileSpec;
     
     float fDelayLength = delay_length;//400Hz
-    float fGain = 1;
+    float fGain = gain;
     float fMaxDelayLengthInS = 1;
     
     // open the input wave file

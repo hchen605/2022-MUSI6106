@@ -36,11 +36,7 @@ protected:
     int                  iMaxDelayInSample;
     int                  iNumChannels;
     
-    // 
-    //rror_t setGain(float fGain);
-    //Error_t setDelay(float fDelay);
-    //float getGain() const;
-    //float getDelay() const;
+    
     
     
 private:

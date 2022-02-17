@@ -35,7 +35,8 @@ CCombFilterBase::~CCombFilterBase()
 
 
 
-Error_t CCombFilterBase::setParam(CCombFilterIf::FilterParam_t eParam, float fParamValue) {
+Error_t CCombFilterBase::setParam(CCombFilterIf::FilterParam_t eParam, float fParamValue)
+{
     switch (eParam)
     {
     case CCombFilterIf::kParamGain:
@@ -60,7 +61,8 @@ Error_t CCombFilterBase::setParam(CCombFilterIf::FilterParam_t eParam, float fPa
 
 
 
-float CCombFilterBase::getParam(CCombFilterIf::FilterParam_t eParam) const {
+float CCombFilterBase::getParam(CCombFilterIf::FilterParam_t eParam) const
+{
     switch (eParam)
     {
     case CCombFilterIf::kParamGain:
