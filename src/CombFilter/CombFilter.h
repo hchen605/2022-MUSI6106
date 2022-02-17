@@ -12,14 +12,14 @@
 
 
 
-class CCombFilterBase
-{
+class CCombFilterBase{
+    
 public:
     CCombFilterBase(float fMaxDelayLengthInS, float fSampleRateInHz, int iNumChannels);
     virtual ~CCombFilterBase();
     
-    virtual Error_t filter(float** ppfInputBuffer, float** ppfOutputBuffer, int iNumberOfFrames){
-        //return Error_t::kNotImplementedError;
+    virtual Error_t process(float** ppfInputBuffer, float** ppfOutputBuffer, int iNumberOfFrames){
+
         return Error_t::kNoError;
     }
     
@@ -27,24 +27,26 @@ public:
     float getParam(CCombFilterIf::FilterParam_t eParam) const;
     
 protected:
-    CRingBuffer<float>* m_buffer;
-    float               m_fGain;
-    float               m_fDelay;
-    float               m_fSampleRateInHz;
-    int                 m_iDelayInSample;
-    int                 m_iNumChannels;
+    CRingBuffer<float>** ppRingBuffer; //for multiple channel
+    float                mfGain;
+    float                mfDelay;
+    float                mfSampleRateInHz;
+    float                mfMaxDelayLengthInS;
+    int                  iDelayInSample;
+    int                  iMaxDelayInSample;
+    int                  iNumChannels;
     
     // 
-    Error_t setGain(float fGain);
-    Error_t setDelay(float fDelay);
-    float getGain() const;
-    float getDelay() const;
+    //rror_t setGain(float fGain);
+    //Error_t setDelay(float fDelay);
+    //float getGain() const;
+    //float getDelay() const;
     
     
 private:
     
-    const float m_kfMaxGain = 1.F;
-    const float m_kfMaxDelay = 1.F; // 1s
+    const float m_fMaxGain = 1.F;
+    const float m_fMaxDelay = 1.F; // 1s
     //T* m_ptBuff;            //!< data buffer
 };
 
@@ -54,7 +56,7 @@ public:
     FIRCombFilter (float fMaxDelayLengthInS, float fSampleRateInHz, int iNumChannels);
     virtual ~FIRCombFilter(){};
 
-    Error_t filter(float** ppfInputBuffer, float** ppfOutputBuffer, int iNumberOfFrames) override;
+    Error_t process(float** ppfInputBuffer, float** ppfOutputBuffer, int iNumberOfFrames) override;
 };
 
 class IIRCombFilter : public CCombFilterBase {
@@ -62,7 +64,7 @@ public:
     IIRCombFilter (float fMaxDelayLengthInS, float fSampleRateInHz, int iNumChannels);
     virtual ~IIRCombFilter(){};
 
-    Error_t filter(float** ppfInputBuffer, float** ppfOutputBuffer, int iNumberOfFrames) override;
+    Error_t process(float** ppfInputBuffer, float** ppfOutputBuffer, int iNumberOfFrames) override;
 };
 
 
